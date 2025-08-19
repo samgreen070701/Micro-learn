@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MicroLearn</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    :root{--bg:#0f1115;--fg:#e8e8e8;--muted:#9aa0a6;--card:#171a21;--accent:#5ee0a0}
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    body{margin:0;background:var(--bg);color:var(--fg)}
+    header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#12151b;position:sticky;top:0;border-bottom:1px solid #1f232b}
+    h1{font-size:18px;margin:0}
+    #streak{font-size:12px;color:var(--muted)}
+    main{padding:16px;max-width:720px;margin:0 auto}
+    .card{background:var(--card);border:1px solid #242a35;border-radius:12px;padding:18px;min-height:140px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h2{margin:0 0 8px 0;font-size:18px;color:#d9e3f0}
+    .card p{margin:0 0 8px 0;color:#c9d1d9;line-height:1.35}
+    .tags{font-size:12px;color:var(--muted);margin-top:8px}
+    .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    button{padding:12px;border-radius:10px;border:1px solid #2b3240;background:#161a22;color:var(--fg);font-weight:600}
+    button.good{border-color:#1f6f4a}
+    button.hard{border-color:#6f4a1f}
+    button.again{border-color:#6f1f2a}
+    .row{display:flex;gap:8px;margin-top:12px}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #2b3240;background:#0f141c;color:#e6edf3}
+    textarea{min-height:80px}
+    .muted{color:var(--muted);font-size:12px;margin-top:6px}
+    nav{display:flex;gap:8px;margin-top:16px}
+    nav button{flex:1}
+    .hidden{display:none}
+    .pill{display:inline-block;padding:2px 8px;border:1px solid #2b3240;border-radius:999px;margin-right:6px;font-size:12px}
+    footer{padding:24px 16px;color:var(--muted);text-align:center}
+    a{color:var(--accent);text-decoration:none}
+    .topbar{display:flex;gap:8px;align-items:center}
+    .topbar select{max-width:160px}
+    #timer{font-variant-numeric:tabular-nums;font-weight:600}
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <h1>MicroLearn</h1>
+    <select id="topicFilter" title="Topic filter"></select>
+    <span id="timer" aria-live="polite">00:00</span>
+  </div>
+  <div id="streak">streak: <span id="streakCount">0</span> • goal: <span id="goalMin">5</span> min</div>
+</header>
+
+<main>
+  <section id="reviewView">
+    <div class="card" id="card">
+      <h2 id="cardTitle">Tap “Start”</h2>
+      <p id="cardBody">One quick card. 20–60 seconds. Learn and go.</p>
+      <div class="tags" id="cardTags"></div>
+    </div>
+    <nav>
+      <button id="startBtn">Start</button>
+      <button id="skipBtn">Skip</button>
+      <button id="revealBtn">Reveal</button>
+    </nav>
+    <div class="actions hidden" id="gradeBtns">
+      <button class="again" data-grade="again">Again</button>
+      <button class="hard" data-grade="hard">Hard</button>
+      <button class="good" data-grade="good">Good</button>
+    </div>
+    <div class="muted">Tip: Add to Home Screen to use like an app. Works offline after first load.</div>
+  </section>
+
+  <hr style="border:0;border-top:1px solid #202634;margin:20px 0">
+
+  <section id="editorView">
+    <h2 style="margin:0 0 8px 0">Create card</h2>
+    <div class="row">
+      <input id="newTitle" placeholder="Front (prompt)">
+    </div>
+    <div class="row">
+      <textarea id="newBack" placeholder="Back (answer or explanation)"></textarea>
+    </div>
+    <div class="row">
+      <input id="newTags" placeholder="Tags, comma-separated (e.g., science, morphemes)">
+    </div>
+    <div class="row">
+      <button id="addBtn">Add</button>
+      <button id="exportBtn">Export</button>
+      <input id="importFile" type="file" accept="application/json">
+    </div>
+    <div class="muted">Stored locally in your browser. Export JSON to back up or share.</div>
+  </section>
+</main>
+
+<footer>
+  <a href="https://example.invalid">v1.0</a> • MIT License
+</footer>
+
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+</body>
+</html>
